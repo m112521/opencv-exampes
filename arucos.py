@@ -19,7 +19,9 @@ while True:
 
     if ids is not None:
         cv2.aruco.drawDetectedMarkers(frame, corners, ids)
-        print(corners)
+        cv2.circle(frame, (int(corners[0][0][0][0]), int(corners[0][0][0][1])), 8, (255, 0, 0), -1)
+        cv2.circle(frame, (int(corners[0][0][1][0]), int(corners[0][0][1][1])), 8, (0, 255, 120), -1)
+        cv2.circle(frame, (int(corners[0][0][2][0]), int(corners[0][0][2][1])), 8, (0, 0, 255), -1)
     
     cv2.imshow('Detected Markers', frame)
     
