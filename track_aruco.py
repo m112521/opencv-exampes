@@ -18,11 +18,18 @@ point_color = (0, 250, 120)
 point_radius = 2
 point_thickness = -1
 
-def euclidean_distance(pt1, pt2):
-    x1, y1 = pt1
-    x2, y2 = pt2
-    distance = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
-    return distance
+
+def get_bb(points):
+    x_coords = [p[0] for p in points]
+    y_coords = [p[1] for p in points]
+
+    min_x = min(x_coords)
+    max_x = max(x_coords)
+    min_y = min(y_coords)
+    max_y = max(y_coords)
+
+    #bounding_box = (min_x, min_y, max_x, max_y)
+    return (min_x, min_y, max_x - min_x, max_y - min_y)
 
 
 while True:
@@ -39,16 +46,12 @@ while True:
 
     if ids is not None:
         if not tracker_state:
-            # 1. Find top-left corner cordinates of aruco marker
-            # 2. Calc dist b top-left corner and top-right/bottom-left corners
             p0 = (int(corners[0][0][0][0]), int(corners[0][0][0][1]))
             p1 = (int(corners[0][0][1][0]), int(corners[0][0][1][1]))
             p2 = (int(corners[0][0][2][0]), int(corners[0][0][2][1]))
             p3 = (int(corners[0][0][3][0]), int(corners[0][0][3][1]))
-            width = int(euclidean_distance(p0, p1))
-            height = int(euclidean_distance(p1, p2))
-            # (x, y, width, height)
-            bbox = (p0[0], p0[1], width, height)
+            bbox = get_bb([p0, p1, p2, p3]) # (x, y, width, height)
+            
             tracker.init(frame, bbox)
             tracker_state = True            
 
