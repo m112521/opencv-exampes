@@ -1,0 +1,35 @@
+const int ledPin = 13; // the pin that the LED is attached to
+
+int s1;
+int s2;
+// "S1:120;S2:250";
+
+void setup() {
+  Serial.begin(9600);
+  Serial.setTimeout(10);
+  pinMode(ledPin, OUTPUT);
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    String data = Serial.readStringUntil('\n');
+
+    int s1Index = data.indexOf("S1:") + 3; 
+    int delIndex = data.indexOf(";", s1Index); 
+    String s1String = data.substring(s1Index, delIndex);
+    int s1 = s1String.toInt();
+    //float temperature = tempString.toFloat();
+
+    String s2String = data.substring(delIndex + 4, data.length());
+    int s2 = s2String.toInt();
+
+    Serial.println("sensor 1: " + String(s1) + "; " + "sensor 2: " + String(s2));
+
+    if (s1 > 100 && s2 < 255) {
+      digitalWrite(ledPin, HIGH);
+    }
+    else {
+      digitalWrite(ledPin, LOW);
+    }
+  }
+}
