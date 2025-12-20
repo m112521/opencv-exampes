@@ -44,11 +44,15 @@ while True:
         if angle_deg < 0:
              angle_deg += 360
             
-        print(f"2D Angle: {angle_deg:.2f} degrees")
+        #print(f"2D Angle: {angle_deg:.2f} degrees")
         data_to_send = f"S1:{angle_deg:.2f};S2:135.0"
         ser.write(data_to_send.encode('utf-8'))
 
         # ADD: read from Serial
+        if ser.in_waiting > 0:
+            response = ser.readline().decode('utf-8').strip()
+            print(f"Received from Arduino: {response}")
+
 
     pt1 = (MARGIN, MARGIN)
     pt2 = (frame.shape[1] - MARGIN, frame.shape[0] - MARGIN)
